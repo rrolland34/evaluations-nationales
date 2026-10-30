@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Automatismes - Mon Site de Maths
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+
+</head>
+
+<body class="reader-page">
+  <nav class="navbar">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a
+          href="index.html"
+          class="nav-link"
+        >
+          Accueil
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          href="automatismes_6.html"
+          class="nav-link"
+        >
+          Automatismes 6e
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div id="top-controls">
+    <button
+      id="start"
+      class="btn large"
+      type="button"
+    >
+      Commencer
+    </button>
+
+    <button
+      id="restart"
+      class="btn large"
+      type="button"
+      style="display:none;"
+    >
+      Recommencer
+    </button>
+
+    <button
+      id="export-evaluation"
+      class="btn large"
+      type="button"
+      style="display:none;"
+    >
+      Exporter
+    </button>
+
+    <div
+      id="time-control"
+      class="control-group"
+    >
+      <label
+        for="time-slider"
+        style="color:white; font-weight:600;"
+      >
+        Temps :
+      </label>
+
+      <input
+        id="time-slider"
+        type="range"
+        min="10"
+        max="120"
+        value="30"
+        step="5"
+      >
+
+      <span
+        id="time-value"
+        style="
+          min-width:40px;
+          text-align:center;
+          color:white;
+          font-weight:700;
+        "
+      >
+        30
+      </span>
+
+      <span
+        style="
+          color:#ddd;
+          font-size:0.85em;
+        "
+      >
+        s
+      </span>
+    </div>
+
+    <div
+      id="question-count-control"
+      style="
+        display:flex;
+        align-items:center;
+        gap:8px;
+      "
+    >
+      <label
+        for="question-count-slider"
+        style="color:white; font-weight:600;"
+      >
+        Nombre de questions :
+      </label>
+
+      <input
+        id="question-count-slider"
+        type="range"
+        min="5"
+        max="20"
+        value="5"
+        step="1"
+      >
+
+      <span
+        id="question-count-value"
+        style="
+          min-width:40px;
+          text-align:center;
+          color:white;
+          font-weight:700;
+        "
+      >
+        5
+      </span>
+    </div>
+
+    <div
+      id="mode-control"
+      style="
+        display:flex;
+        align-items:center;
+        gap:12px;
+      "
+    >
+      <span
+        style="
+          color:white;
+          font-weight:600;
+        "
+      >
+        Type :
+      </span>
+
+      <div
+        style="
+          display:flex;
+          gap:8px;
+        "
+      >
+        <button
+          id="mode-direct"
+          class="mode-btn active"
+          type="button"
+          style="
+            padding:6px 12px;
+            background:#4CAF50;
+            color:white;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+            font-weight:600;
+          "
+        >
+          Réponse
+        </button>
+
+        <button
+          id="mode-qcm"
+          class="mode-btn"
+          type="button"
+          style="
+            padding:6px 12px;
+            background:#666;
+            color:white;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+            font-weight:600;
+          "
+        >
+          QCM
+        </button>
+
+        <button
+          id="mode-mixed"
+          class="mode-btn"
+          type="button"
+          style="
+            padding:6px 12px;
+            background:#666;
+            color:white;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+            font-weight:600;
+          "
+        >
+          Mixte
+        </button>
+
+        <div
+          id="mixed-qcm-control"
+          style="
+            display:none;
+            align-items:center;
+            gap:8px;
+            margin-left:12px;
+          "
+        >
+          <label
+            for="mixed-qcm-slider"
+            style="
+              color:white;
+              font-weight:600;
+            "
+          >
+            QCM :
+          </label>
+
+          <input
+            id="mixed-qcm-slider"
+            type="range"
+            min="0"
+            max="5"
+            value="0"
+            step="1"
+          >
+
+          <span
+            id="mixed-qcm-value"
+            style="
+              min-width:30px;
+              text-align:center;
+              color:white;
+              font-weight:700;
+            "
+          >
+            0
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="presentation-control"
+      style="
+        display:flex;
+        align-items:center;
+        gap:12px;
+      "
+    >
+      <span
+        style="
+          color:white;
+          font-weight:600;
+        "
+      >
+        Mode :
+      </span>
+
+      <div
+        style="
+          display:flex;
+          gap:8px;
+        "
+      >
+        <button
+          id="mode-response"
+          class="presentation-btn active"
+          type="button"
+          style="
+            padding:6px 12px;
+            background:#4CAF50;
+            color:white;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+            font-weight:600;
+          "
+        >
+          Réponse
+        </button>
+
+        <button
+          id="mode-slideshow"
+          class="presentation-btn"
+          type="button"
+          style="
+            padding:6px 12px;
+            background:#666;
+            color:white;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+            font-weight:600;
+          "
+        >
+          Diaporama
+        </button>
+      </div>
+    </div>
+
+    <button
+      id="pause-timer"
+      type="button"
+      style="
+        display:none;
+        padding:6px 14px;
+        cursor:pointer;
+      "
+    >
+      Pause
+    </button>
+  </div>
+
+  <div
+    id="slideshow-status"
+    style="
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      margin:12px auto;
+    "
+  >
+    <div
+      id="question-counter"
+      style="
+        font-size:1.8em;
+        font-weight:700;
+        color:#666;
+        text-align:center;
+      "
+    >
+      Question 1/5
+    </div>
+  </div>
+
+  <main class="main-content">
+    <section class="question-container">
+      <h1 class="question-title">
+        Automatismes
+      </h1>
+
+      <div
+        id="question"
+        class="question-display"
+      ></div>
+
+      <div
+        id="timer"
+        class="timer"
+      >
+        30
+      </div>
+
+      <div
+        id="correction-overlay"
+        class="correction-overlay"
+        style="display:none;"
+      >
+        <div class="overlay-content">
+          <div class="question-title overlay-title">
+            Correction
+          </div>
+
+          <p class="overlay-subtext">
+            Appuyez sur Entrée pour commencer
+          </p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <input
+          type="text"
+          id="user-answer"
+          placeholder="Votre réponse"
+          style="display:block;"
+        >
+
+        <div id="multi-answer-container"></div>
+
+        <div
+          id="math-keyboard"
+          style="display:none;"
+        >
+          <button
+            type="button"
+            id="math-key-pi"
+            class="math-key"
+          >
+            \(\pi\)
+          </button>
+
+          <button
+            id="math-key-power"
+            type="button"
+          >
+            xⁿ
+          </button>
+
+          <button
+            id="math-key-not-equal"
+            type="button"
+          >
+            ≠
+          </button>
+        </div>
+
+        <div
+          id="qcm-options"
+          style="
+            display:none;
+            margin:12px 0;
+          "
+        >
+          <div
+            id="qcm-buttons"
+          ></div>
+        </div>
+
+        <button
+          id="submit"
+          type="button"
+        >
+          Valider
+        </button>
+
+        <button
+          id="next"
+          type="button"
+        >
+          Question suivante
+        </button>
+      </div>
+
+      <div
+        id="feedback"
+        class="feedback"
+      ></div>
+
+      <div
+        id="result"
+        class="feedback"
+      ></div>
+    </section>
+  </main>
+
+  <script
+    type="module"
+    src="main.js"
+  ></script>
+</body>
+</html>
