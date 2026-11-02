@@ -23,7 +23,9 @@ export function initializeExportPrint({
   printButton.addEventListener(
     "click",
     () => {
-      archiveWindow.print();
+      if (!printButton.disabled && archiveWindow.document.documentElement.hasAttribute("data-export-ready")) {
+        archiveWindow.print();
+      }
     }
   );
 

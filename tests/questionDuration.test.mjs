@@ -391,3 +391,35 @@ test("les six remédiations utilisent le curseur au chargement et après régén
     else globalThis.requestAnimationFrame = previousRAF;
   }
 });
+
+for (const question of [0, 1, 2]) {
+  test(`Pause/Reprendre, focus conservé et cycles multiples sur la question ${question + 1}`, () => {
+    const app = setup();
+    app.page.onStart();
+    for (let i = 0; i < question; i++) app.key();
+    const target = { closest() { return { id: "pause-timer" }; } };
+    const pause = app.element("pause-timer");
+    const remaining = app.run("getTimeLeft()");
+    for (let cycle = 0; cycle < 4; cycle++) {
+      pause.handlers.click();
+      assert.equal(app.run("getIsPaused()"), true);
+      assert.equal(app.activeTimers, 0);
+      app.key({ target });
+      app.key();
+      assert.equal(app.run("currentQuestionIndex"), question);
+      assert.equal(app.run("userAnswers.length"), question);
+      assert.equal(app.run("getTimeLeft()"), remaining);
+      pause.handlers.click();
+      assert.equal(app.run("getIsPaused()"), false);
+      assert.equal(app.activeTimers, 1);
+    }
+    const event = app.key({ target });
+    assert.equal(event.defaultPrevented, true, "pas d'activation native du bouton");
+    assert.equal(app.run("userAnswers.length"), question + 1, "un seul déclenchement");
+    if (question < 2) {
+      assert.equal(app.run("currentQuestionIndex"), question + 1);
+      assert.equal(app.activeTimers, 1);
+    } else assert.equal(app.activeTimers, 0);
+    app.run("stopTimer()");
+  });
+}

@@ -1,5 +1,7 @@
 // core/keyboardShortcuts.js
 
+import { getIsPaused } from "./timer.js";
+
 export function initializeKeyboardShortcuts({
   isWaitingForCorrection,
   isInCorrectionMode,
@@ -24,9 +26,12 @@ export function initializeKeyboardShortcuts({
         event.preventDefault();
         if (
           event.repeat || event.ctrlKey || event.altKey || event.metaKey ||
-          event.target?.isContentEditable ||
-          event.target?.closest?.('input, textarea, select, button, a[href], [contenteditable], [role="button"], [role="textbox"]')
+          event.target?.isContentEditable || getIsPaused()
         ) return;
+        // Le focus reste sur Pause après un clic sur Reprendre. Ce contrôle
+        // appartient au diaporama ; les autres contrôles restent protégés.
+        const control = event.target?.closest?.('input, textarea, select, button, a[href], [contenteditable], [role="button"], [role="textbox"]');
+        if (control && control.id !== "pause-timer") return;
         if (
           getPresentationMode() === "slideshow" &&
           !isWaitingForCorrection() &&
